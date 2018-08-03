@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>加密与解密 第二章 动态调试技术 - 0Xor' CTF WriteUp</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "\u52a0\u5bc6\u4e0e\u89e3\u5bc6 \u7b2c\u4e8c\u7ae0 \u52a8\u6001\u8c03\u8bd5\u6280\u672f";
+    var mkdocs_page_input_path = "reversing\\encrypt&decrypt\\\u52a0\u5bc6\u4e0e\u89e3\u5bc6 \u7b2c\u4e8c\u7ae0-\u52a8\u6001\u8c03\u8bd5\u6280\u672f.md";
+    var mkdocs_page_url = "/reversing/encrypt&decrypt/\u52a0\u5bc6\u4e0e\u89e3\u5bc6 \u7b2c\u4e8c\u7ae0-\u52a8\u6001\u8c03\u8bd5\u6280\u672f/";
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> 0Xor' CTF WriteUp</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../..">Welcome to 0Xor' WriteUp</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Reversing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../Moblie/">Moblie</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../reversing%20misc/">reversing misc</a>
+                </li>
+                <li class=" current">
+                    
+    <span class="caption-text">Encrypt&decrypt</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">加密与解密 第一章 基础知识</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%9D%99%E6%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E6%9C%AF/">加密与解密 第三章 静态调试技术</a>
+                </li>
+                <li class="toctree-l3 current">
+                    
+    <a class="current" href="./">加密与解密 第二章 动态调试技术</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l4"><a href="#_1">第二章 动态分析技术</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l5" href="#21-ollydbg">2.1 ollyDbg</a></li>
+        
+            <li><a class="toctree-l5" href="#22-softice">2.2 softice调试器</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%8D%81%E7%AB%A0-PE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/">加密与解密 第十章 PE文件格式</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E9%80%86%E5%90%91%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF/">加密与解密 第四章 逆向分析技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%E7%9B%AE%E5%BD%95/">目录</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Wargame</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <span class="caption-text">Crypto</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/%5Bctf.nuptzj.cn%5D_PHP_decode/">[ctf.nuptzj.cn] PHP decode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/%5Bctf.nuptzj.cn%5D_base64_N_times/">[ctf.nuptzj.cn] base64 N times</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/%5Bctf.nuptzj.cn%5D_base64_all/">[ctf.nuptzj.cn] base64 all</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/%5Bctf.nuptzj.cn%5D_easy/">[ctf.nuptzj.cn] easy</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/%5Bctf.nuptzj.cn%5D_keyboard/">[ctf.nuptzj.cn] keyboard</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/%5Bctf.nuptzj.cn%5D_md5/">[ctf.nuptzj.cn] md5</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/%5Bctf.nuptzj.cn%5D_mixed_base64/">[ctf.nuptzj.cn] mixed base64</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/%5Bctf.nuptzj.cn%5D_vigenere/">[ctf.nuptzj.cn] vigenere</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/%5Bctf.nuptzj.cn%5D_xor/">[ctf.nuptzj.cn] xor</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/crypto/crypto_summary/">Crypto summary</a>
+                </li>
+    </ul>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Misc</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/misc/%5Bctf.nuptzj.cn%5D_gif/">[ctf.nuptzj.cn] gif</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/misc/%5Bctf.nuptzj.cn%5D_qiubilong/">[ctf.nuptzj.cn] qiubilong</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/misc/%5Bctf.nuptzj.cn%5D_tuzhong/">[ctf.nuptzj.cn] tuzhong</a>
+                </li>
+    </ul>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Reversing</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/reversing/%5Bbugku.com%5D_ali/">[bugku.com] ali</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/reversing/%5Bctf.nuptzj.cn%5D_ReadAsm2/">[ctf.nuptzj.cn] ReadAsm2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/reversing/%5Bctf.nuptzj.cn%5D_maze/">[ctf.nuptzj.cn] maze</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/reversing/%5Bctf.nuptzj.cn%5D_py/">[ctf.nuptzj.cn] py</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/reversing/%5Bctf.nuptzj.cn%5D_wxyvm/">[ctf.nuptzj.cn] wxyvm</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/reversing/%5Bctf.nuptzj.cn%5D_wxyvm2/">[ctf.nuptzj.cn] wxyvm2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/reversing/%5Bwhaleedu.com%5D_dice/">[whaleedu.com] dice</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/reversing/%5Bwhaleedu.com%5D_pyc1/">[whaleedu.com] pyc1</a>
+                </li>
+    </ul>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Web</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bbugku.com%5D_upload_test/">[bugku.com] upload test</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bbugku.com%5D_web2/">[bugku.com] web2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_20_years/">[ctf.nuptzj.cn] 20 years</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_aaencode/">[ctf.nuptzj.cn] aaencode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_bypass_again/">[ctf.nuptzj.cn] bypass again</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_cookie/">[ctf.nuptzj.cn] cookie</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_md5_collision/">[ctf.nuptzj.cn] md5 collision</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_multi-byte_character/">[ctf.nuptzj.cn] multi byte character</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_mysql/">[ctf.nuptzj.cn] mysql</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_pass%20check/">[ctf.nuptzj.cn] pass check</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_php_0x/">[ctf.nuptzj.cn] php 0x</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_php_LFI/">[ctf.nuptzj.cn] php LFI</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_php_decode/">[ctf.nuptzj.cn] php decode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_qiandao/">[ctf.nuptzj.cn] qiandao</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_qiandao2/">[ctf.nuptzj.cn] qiandao2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_sql_injection_1/">[ctf.nuptzj.cn] sql injection 1</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_sql_injection_2/">[ctf.nuptzj.cn] sql injection 2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_sql_injection_4/">[ctf.nuptzj.cn] sql injection 4</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_upload_file/">[ctf.nuptzj.cn] upload file</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_url_redirect/">[ctf.nuptzj.cn] url redirect</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_var_override/">[ctf.nuptzj.cn] var override</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_web3/">[ctf.nuptzj.cn] web3</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_where_are_you_come_from/">[ctf.nuptzj.cn] where are you come from</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_x00/">[ctf.nuptzj.cn] x00</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_zonghe/">[ctf.nuptzj.cn] zonghe</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bctf.nuptzj.cn%5D_zonghe2/">[ctf.nuptzj.cn] zonghe2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bshiyanbar.com%5D_add_something/">[shiyanbar.com] add something</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bshiyanbar.com%5D_be_serious/">[shiyanbar.com] be serious</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bshiyanbar.com%5D_forms/">[shiyanbar.com] forms</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bshiyanbar.com%5D_guaiwanmojiao/">[shiyanbar.com] guaiwanmojiao</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bshiyanbar.com%5D_houtaidenglu/">[shiyanbar.com] houtaidenglu</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bshiyanbar.com%5D_post_fast/">[shiyanbar.com] post fast</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bshiyanbar.com%5D_simple_sql_injection/">[shiyanbar.com] simple sql injection</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bshiyanbar.com%5D_simple_sql_injection_2/">[shiyanbar.com] simple sql injection 2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/%5Bshiyanbar.com%5D_simple_sql_injection_3/">[shiyanbar.com] simple sql injection 3</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../wargame/web/web_summary/">Web summary</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Web</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../web/sqlmap_learning/">Sqlmap learning</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">0Xor' CTF WriteUp</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Reversing &raquo;</li>
+        
+      
+        
+          <li>Encrypt&decrypt &raquo;</li>
+        
+      
+    
+    <li>加密与解密 第二章 动态调试技术</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p>加密与解密 第2篇 调试篇</p>
+<h2 id="_1">第二章 动态分析技术</h2>
+<h3 id="21-ollydbg">2.1 ollyDbg</h3>
+<h4 id="211-ollydbg">2.1.1 ollyDbg界面</h4>
+<ul>
+<li>窗口</li>
+</ul>
+<p>CPU等各窗口</p>
+<ul>
+<li>
+<p>CPU面板窗口</p>
+</li>
+<li>
+<p>反汇编</p>
+<ul>
+<li>
+<p>address列</p>
+</li>
+<li>
+<p>hex dump列 </p>
+</li>
+</ul>
+<p>快捷键：F2设置断点</p>
+<ul>
+<li>
+<p>Disassemly列</p>
+</li>
+<li>
+<p>comment</p>
+</li>
+</ul>
+<p>快捷键：；</p>
+<ul>
+<li>
+<p>多行选择</p>
+</li>
+<li>
+<p>shift+键盘上下</p>
+</li>
+<li>ctrl+鼠标</li>
+</ul>
+</li>
+<li>
+<p>信息</p>
+<ul>
+<li>与指令相关的寄存器值</li>
+<li>api调用提示</li>
+<li>跳转提示</li>
+<li>等</li>
+</ul>
+</li>
+<li>
+<p>数据</p>
+<ul>
+<li>十六进制显示文件在内存中的数据</li>
+</ul>
+</li>
+<li>
+<p>寄存器</p>
+</li>
+<li>
+<p>堆栈</p>
+</li>
+</ul>
+<h4 id="212-ollydbg">2.1.2 OllyDbg的设置</h4>
+<h5 id="_2">界面设置</h5>
+<ul>
+<li>udd文件和插件路径设置</li>
+</ul>
+<blockquote>
+<p>options -&gt; appearance-&gt; Directores</p>
+</blockquote>
+<p>设置成绝对路径</p>
+<ul>
+<li>udd文件</li>
+</ul>
+<p>保存当前调试的一些状态</p>
+<ul>
+<li>断点</li>
+<li>
+<p>注释等</p>
+</li>
+<li>
+<p>插件</p>
+</li>
+</ul>
+<h5 id="_3">调试设置</h5>
+<blockquote>
+<p>Options -&gt; Debugging options</p>
+</blockquote>
+<p>忽略各种异常</p>
+<h5 id="_4">加载符号文件</h5>
+<ul>
+<li>让ollydbg以函数名显示DLL中的函数</li>
+</ul>
+<blockquote>
+<p>Debug-&gt;select import libraries</p>
+</blockquote>
+<h5 id="_5">关联到右键</h5>
+<blockquote>
+<p>Options/add to explorer-&gt;Add ollydbg to menu...</p>
+</blockquote>
+<h4 id="213">2.1.3 加载程序</h4>
+<h5 id="createproces">createProces创建进程</h5>
+<h5 id="_6">附加到一个运行的进程上</h5>
+<blockquote>
+<p>File/Attach</p>
+</blockquote>
+<ul>
+<li>隐藏进程的附加</li>
+</ul>
+<p><code>shell
+  ollydbg.exe -p pid值</code></p>
+<ul>
+<li>
+<p>附加不成功</p>
+</li>
+<li>
+<p>a.exe 调用b.exe</p>
+</li>
+<li>b.exe附加不成功</li>
+<li>设置olldbg为<code>Just-in-time debugging</code></li>
+<li>修改b.exe的入口点指令为CC(int 3)</li>
+<li>运行a.exe</li>
+<li>b.exe运行到int 3异常</li>
+<li>还原原指令，继续调试</li>
+</ul>
+<h4 id="214">2.1.4 基本操作</h4>
+<ol>
+<li>
+<p>准备工作</p>
+</li>
+<li>
+<p>加载目标文件调试</p>
+</li>
+</ol>
+<blockquote>
+<p>Options/Debugging Options -&gt; Event</p>
+</blockquote>
+<p>断点设置：</p>
+<ul>
+<li>system breakpoints:  int3</li>
+<li>Entry point of main module：主模块的入口点</li>
+<li>
+<p>winMain: 即使设置了这个选项，一般也会断在文件入口点</p>
+</li>
+<li>
+<p>断点跟踪</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>功能键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F7</td>
+<td>单步步进</td>
+</tr>
+<tr>
+<td>F8</td>
+<td>单步步过</td>
+</tr>
+<tr>
+<td>Ctrl+F9</td>
+<td>直到出现Ret指令时中断</td>
+</tr>
+<tr>
+<td>alt+F9</td>
+<td>若进入系统领空，瞬间返回应用程序领空</td>
+</tr>
+<tr>
+<td>F9</td>
+<td>运行程序</td>
+</tr>
+<tr>
+<td>ctlr+F2</td>
+<td>重新调试应用程序</td>
+</tr>
+<tr>
+<td>F12</td>
+<td><strong>暂停程序，程序进入死循环时可以使用</strong></td>
+</tr>
+<tr>
+<td>F2</td>
+<td>设置/取消断点</td>
+</tr>
+<tr>
+<td>alt+B</td>
+<td>打开断点窗口（不显示硬件断点）</td>
+</tr>
+<tr>
+<td>ctrl+N</td>
+<td>打开应用程序输入表</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>打开文件</td>
+</tr>
+<tr>
+<td>F5</td>
+<td><strong>显示各个窗口，双击返回当前窗口</strong></td>
+</tr>
+<tr>
+<td>ALT+M</td>
+<td>显示内存</td>
+</tr>
+<tr>
+<td>F4</td>
+<td><strong>执行到光标所在行</strong></td>
+</tr>
+<tr>
+<td>shift+F2</td>
+<td>条件断点</td>
+</tr>
+<tr>
+<td>shift+F4</td>
+<td>条件记录断点</td>
+</tr>
+<tr>
+<td>Alt+F7</td>
+<td>转到上一个找到的参考</td>
+</tr>
+<tr>
+<td>Alt+F8</td>
+<td>转到下一个找到参考</td>
+</tr>
+<tr>
+<td>Ctrl+R</td>
+<td>搜索所选命令的参考。该命令扫描激活模块的全部可执行代码，以找到涉及到首个选中的命令的全部相关参考（包括：常量、跳转及调用），您可以在参考中使用快捷键 Alt+F7 和 Alt+F8来浏览这些参考。为便于您使用，被参考的命令也包含在该列表中。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>需要多次按F7或者F8键时，可以按<code>ctrl+F7</code>或者<code>ctlr+F8</code>，直到ESC、F12或者遇到其他断点中止</p>
+</li>
+<li>
+<p>设置断点</p>
+</li>
+<li>
+<p>在特定表达式上设置断点</p>
+<ul>
+<li>Ctrl+G :  打开跟随表达式窗口（e.g <code>GetDlgItemTextA</code>）</li>
+<li>F2 设置断点</li>
+<li>win9x系统中，ollydbg无法对api函数设断点</li>
+<li>在输入表中设置断点</li>
+<li>Ctrl+N 打开输入表</li>
+<li>找到要找的函数</li>
+<li>enter或者右键"Find references to import"命令打开调用此函数的参考代码窗口，找到相应的代码</li>
+<li>enter切换到相应的代码</li>
+<li>F2设置断点</li>
+</ul>
+</li>
+<li>
+<p>调试分析</p>
+</li>
+<li>
+<p>程序中断后，<code>alt+f9</code>回到调用函数的地方</p>
+</li>
+<li><code>alt+b</code>，禁用掉<code>getDlgItemTextA</code>断点</li>
+<li>为了方便反复调试，在调用出设置断点</li>
+</ul>
+<p>代码阅读</p>
+<ol>
+<li>
+<p>API定义</p>
+</li>
+<li>
+<p>调用约定</p>
+<ul>
+<li>__stdcall<ul>
+<li>参数从右向左顺序入栈</li>
+<li>由被调用者清理堆栈中的参数</li>
+<li>返回值保存在eax中</li>
+</ul>
+</li>
+<li>C调用<ul>
+<li>参数从右向左顺序入栈</li>
+<li>由调用者清理堆栈参数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>查看指定地址处内存值的变化</p>
+<p>e.g <code>push eax</code></p>
+<ol>
+<li>在当前代码行暂停</li>
+<li>在<code>eax</code>寄存器窗口上右键，执行"Follow Dump"，查看数据窗口</li>
+<li>单步执行<code>call GetDlgItemTextA</code>完成</li>
+<li>已经看到内存中值的变化</li>
+</ol>
+</li>
+<li>
+<p>保存修改后的文件</p>
+</li>
+</ol>
+<p>e.g : <code>je short 0040122E</code> </p>
+<ul>
+<li>修改<code>ZF</code>标志位，单击取反</li>
+<li>修改改行代码为<code>9090</code></li>
+<li>鼠标右键，<code>copy to executable/Selection</code></li>
+<li>
+<p><code>save File</code></p>
+</li>
+<li>
+<p>算法分析</p>
+</li>
+</ul>
+<h4 id="215">2.1.5 断点</h4>
+<ol>
+<li>
+<p>int 3断点</p>
+</li>
+<li>
+<p>原理：其机器码是CCh，也常称为CC指令，当被调试进程执行INT3指令导致一个异常时，调试器会捕捉这个异常从而停在断点处，然后将该断点处的指令恢复成原来指令</p>
+</li>
+</ol>
+<p>Ø  优点：可以设置无数个断点</p>
+<p>Ø  缺点：改变了原程序指令，容易被软件检测到    </p>
+<p>Ø  设置方法：F2设置（就是普通的断点） F2取消</p>
+<ol>
+<li>
+<p>硬件断点</p>
+</li>
+<li>
+<p>原理：硬件断点和DRx调试寄存器有关，DRx有8个寄存器</p>
+<blockquote>
+<p>DR0～3：调试地址寄存器，保存需要监视的地址，如设置硬件断点</p>
+<p>DR4～5：保留</p>
+<p>DR6：调试寄存器组状态寄存器</p>
+<p>DR7：调试寄存器组控制寄存器</p>
+</blockquote>
+</li>
+</ol>
+<p>硬件断点是使用DR0 DR1 DR2 DR3来设置断点</p>
+<p>Ø  优点：断点速度快，不容易被发现</p>
+<p>Ø  缺点：只能设置4个断点DR0 DR1 DR2 DR3</p>
+<p>Ø  设置方法：F8到需要设置的位置，右键“Breakpoint/Hardware,on execution”  </p>
+<ol>
+<li>内存断点</li>
+</ol>
+<p>Ø  原理：OD可以设置内存访问断点或内存写入断点，原理是对所设的地址设为不可访问/不可写属性，同样当访问/写入的时候会报异常，并且停留在异常处</p>
+<p>Ø  优点：内存断点不修改原代码。它不像INT3断点，因为修改程序代码而导致中断，因此在遇到代码校验，并且硬件断点失灵情况下，可以用内存断点来代替</p>
+<p>Ø  缺点：只能设置1次</p>
+<p>Ø  设置方法：</p>
+<p>​        右键-&gt;Breakpoint-&gt;Memory ,on access(断点/内存写入)</p>
+<p>​                   -&gt;Memory ,on write(断点/内存访问)</p>
+<ol>
+<li>内存访问一次性断点</li>
+</ol>
+<p>Ø  原理：原理和”Set memory breakpoint on access”功能一样</p>
+<p>Ø  优点：对整个内存块设置断点，快捷键也是F2</p>
+<p>Ø  特点：一次性断点，当所在段读取或执行时就中断，中断发生以后，断点将被删除</p>
+<p>Ø  设置方法：ALT+M 右键-&gt;”Set break-on-access”</p>
+<ol>
+<li>
+<p>消息断点</p>
+</li>
+<li>
+<p>原理：Windows本身是由消息驱动的，如果调试时没有合适的断点，额可以尝试消息断点</p>
+</li>
+<li>
+<p>如何中断返回</p>
+<ol>
+<li>在中断后，由于处在系统代码底层，所以<code>alt+F9</code>或者<code>ctrl+F9</code>，无法回到程序的代码领空</li>
+<li>所以，需要在.txt段中设置内存访问断点<code>set break-on-access</code></li>
+<li>F9运行</li>
+<li>由于中断的地方可能不是想要的消息，所以，可能需要重复1-3步数次，最后发现<strong>check</strong>按钮事件代码</li>
+<li>alt+b进入断点窗口，删除消息断点</li>
+</ol>
+</li>
+<li>
+<p>条件断点</p>
+</li>
+<li>
+<p>条件记录断点</p>
+</li>
+</ol>
+<h4 id="216">2.1.6 插件</h4>
+<ol>
+<li>
+<p>常用插件</p>
+</li>
+<li>
+<p>command bar</p>
+<p><code>alt +F1</code> 快速显示/隐藏command bar</p>
+<p><code>cltr+D</code> 快速定位到输入框</p>
+</li>
+<li>
+<p>插件开发</p>
+</li>
+</ol>
+<h4 id="217-run-trace">2.1.7 run trace</h4>
+<h4 id="218-hit-trace">2.1.8 hit trace</h4>
+<h4 id="219">2.1.9 符号调试技术</h4>
+<ol>
+<li>
+<p>符号格式</p>
+</li>
+<li>
+<p>将16进制数转换为源文件代码行、函数名以及变量名称</p>
+</li>
+<li>
+<p>创建调试文件</p>
+</li>
+</ol>
+<p>以vc6.0为例，建立带有pdb调试信息的调试版本：</p>
+<ul>
+<li>bulild -&gt; set active configuration -&gt; win32 debug</li>
+<li>project -&gt; settings -&gt; c/c++ -&gt; category -&gt; general -&gt; debug info -&gt; program database 产生pdb文件</li>
+<li>
+<p>link -&gt; category -&gt; debug -&gt; debug info &amp; microsoft format &amp; separate types  &amp; generate mapfiles 产生map文件</p>
+</li>
+<li>
+<p>用符号文件调试</p>
+</li>
+<li>
+<p>debugging options -&gt; cpu -&gt; synchronize soure with cpu 选中</p>
+</li>
+<li>cpu窗口-&gt; 单击comment栏 -&gt; 切换到source</li>
+<li>debugging options -&gt; debug -&gt; hide none-existing source files 取消选中</li>
+<li>view/source files 选中正确的源文件</li>
+<li>view/source 打开源代码窗口，就可以看到源码</li>
+<li>在源码窗口下断点，F9运行，就可以正常在源码和反汇编窗口同步调试应用程序了</li>
+</ul>
+<h4 id="2110-ollydbg">2.1.10 OllyDbg常见问题</h4>
+<ol>
+<li>
+<p>乱码的问题</p>
+</li>
+<li>
+<p>如何快速回到当前领空</p>
+</li>
+</ol>
+<p>双击寄存器窗口的EIP</p>
+<ol>
+<li>Ollydbg如何修改EIP</li>
+</ol>
+<p><code>Ctlr+*</code> <strong>发现笔记本键盘无效</strong>:cry:</p>
+<ol>
+<li>什么是UDD</li>
+</ol>
+<p>所有程序或模组相关的信息</p>
+<ol>
+<li>删除了断点，重新加载时，会重新出现</li>
+</ol>
+<p>ollydbg.ini -&gt; 修改为 bacup UDD files=1</p>
+<ol>
+<li><code>push E000</code>未知字符</li>
+</ol>
+<p>0E000 -&gt; 0E000</p>
+<ol>
+<li>假死</li>
+</ol>
+<p>ollydbg.ini -&gt; restore windows=0</p>
+<ol>
+<li>微调窗口显示</li>
+</ol>
+<p>ctrl+↑ 或者 ctrl+↓ 上下翻动一个字节</p>
+<ol>
+<li>“复制到可执行文件”-&gt; 报错：“Unable to locate data in executable file”</li>
+</ol>
+<p>修改的地方不在raw size范围内，修改pe文件，是rawSize=VirtualSize</p>
+<ol>
+<li>
+<p>能否把call调用修改为函数名称形式</p>
+<p><code>shift+;</code>-&gt; 输入函数名称</p>
+</li>
+</ol>
+<h3 id="22-softice">2.2 softice调试器</h3>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%8D%81%E7%AB%A0-PE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/" class="btn btn-neutral float-right" title="加密与解密 第十章 PE文件格式">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%9D%99%E6%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E6%9C%AF/" class="btn btn-neutral" title="加密与解密 第三章 静态调试技术"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>0Xor</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%9D%99%E6%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E6%9C%AF/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%8D%81%E7%AB%A0-PE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/require.js"></script>
+      <script src="../../../search/search.js"></script>
+
+</body>
+</html>

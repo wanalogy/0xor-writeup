@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>[bugku.com] ali - 0Xor' CTF WriteUp</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "[bugku.com] ali";
+    var mkdocs_page_input_path = "wargame\\reversing\\[bugku.com]_ali.md";
+    var mkdocs_page_url = "/wargame/reversing/[bugku.com]_ali/";
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> 0Xor' CTF WriteUp</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../..">Welcome to 0Xor' WriteUp</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Reversing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../reversing/Moblie/">Moblie</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../reversing/reversing%20misc/">reversing misc</a>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Encrypt&decrypt</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">加密与解密 第一章 基础知识</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%9D%99%E6%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E6%9C%AF/">加密与解密 第三章 静态调试技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E6%9C%AF/">加密与解密 第二章 动态调试技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%8D%81%E7%AB%A0-PE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/">加密与解密 第十章 PE文件格式</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E9%80%86%E5%90%91%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF/">加密与解密 第四章 逆向分析技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E7%9B%AE%E5%BD%95/">目录</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Wargame</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <span class="caption-text">Crypto</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_PHP_decode/">[ctf.nuptzj.cn] PHP decode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_base64_N_times/">[ctf.nuptzj.cn] base64 N times</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_base64_all/">[ctf.nuptzj.cn] base64 all</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_easy/">easy</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_keyboard/">[ctf.nuptzj.cn] keyboard</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_md5/">[ctf.nuptzj.cn] md5</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_mixed_base64/">[ctf.nuptzj.cn] mixed base64</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_vigenere/">[ctf.nuptzj.cn] vigenere</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_xor/">[ctf.nuptzj.cn] xor</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/crypto_summary/">Cryto Summary</a>
+                </li>
+    </ul>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Misc</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../misc/%5Bctf.nuptzj.cn%5D_gif/">[ctf.nuptzj.cn] gif</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../misc/%5Bctf.nuptzj.cn%5D_qiubilong/">丘比龙de女神</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../misc/%5Bctf.nuptzj.cn%5D_tuzhong/">图种</a>
+                </li>
+    </ul>
+                </li>
+                <li class=" current">
+                    
+    <span class="caption-text">Reversing</span>
+    <ul class="subnav">
+                <li class="toctree-l3 current">
+                    
+    <a class="current" href="./">[bugku.com] ali</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l4"><a href="#timerctf">Timer(阿里CTF)</a></li>
+    
+
+    <li class="toctree-l4"><a href="#0x1">0x1 题目</a></li>
+    
+
+    <li class="toctree-l4"><a href="#0x2">0x2 解题步骤</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l5" href="#0x1-jeb">0x1 jeb分析文件</a></li>
+        
+            <li><a class="toctree-l5" href="#0x2-k">0x2 计算k值</a></li>
+        
+            <li><a class="toctree-l5" href="#0x3-apk">0x3 修改并打包运行原apk</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_ReadAsm2/">[ctf.nuptzj.cn] ReadAsm2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_maze/">[ctf.nuptzj.cn] maze</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_py/">[ctf.nuptzj.cn] py</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_wxyvm/">[ctf.nuptzj.cn] wxyvm</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_wxyvm2/">[ctf.nuptzj.cn] wxyvm2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bwhaleedu.com%5D_dice/">[whaleedu.com] dice</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bwhaleedu.com%5D_pyc1/">[whaleedu.com] pyc1</a>
+                </li>
+    </ul>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Web</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bbugku.com%5D_upload_test/">[bugku.com] upload test</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bbugku.com%5D_web2/">[bugku.com] web2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_20_years/">[ctf.nuptzj.cn] 20 years</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_aaencode/">[ctf.nuptzj.cn] aaencode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_bypass_again/">[ctf.nuptzj.cn] bypass again</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_cookie/">[ctf.nuptzj.cn] cookie</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_md5_collision/">[ctf.nuptzj.cn] md5 collision</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_multi-byte_character/">[ctf.nuptzj.cn] multi byte character</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_mysql/">[ctf.nuptzj.cn] mysql</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_pass%20check/">[ctf.nuptzj.cn] pass check</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_php_0x/">[ctf.nuptzj.cn] php 0x</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_php_LFI/">[ctf.nuptzj.cn] php LFI</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_php_decode/">[ctf.nuptzj.cn] php decode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_qiandao/">[ctf.nuptzj.cn] qiandao</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_qiandao2/">[ctf.nuptzj.cn] qiandao2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_sql_injection_1/">[ctf.nuptzj.cn] sql injection 1</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_sql_injection_2/">[ctf.nuptzj.cn] sql injection 2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_sql_injection_4/">[ctf.nuptzj.cn] sql injection 4</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_upload_file/">[ctf.nuptzj.cn] upload file</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_url_redirect/">[ctf.nuptzj.cn] url redirect</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_var_override/">[ctf.nuptzj.cn] var override</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_web3/">[ctf.nuptzj.cn] web3</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_where_are_you_come_from/">[ctf.nuptzj.cn] where are you come from</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_x00/">[ctf.nuptzj.cn] x00</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_zonghe/">[ctf.nuptzj.cn] zonghe</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_zonghe2/">[ctf.nuptzj.cn] zonghe2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_add_something/">[shiyanbar.com] add something</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_be_serious/">[shiyanbar.com] be serious</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_forms/">[shiyanbar.com] forms</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_guaiwanmojiao/">[shiyanbar.com] guaiwanmojiao</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_houtaidenglu/">[shiyanbar.com] houtaidenglu</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_post_fast/">[shiyanbar.com] post fast</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_simple_sql_injection/">[shiyanbar.com] simple sql injection</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_simple_sql_injection_2/">[shiyanbar.com] simple sql injection 2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_simple_sql_injection_3/">[shiyanbar.com] simple sql injection 3</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/web_summary/">Web summary</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Web</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../web/sqlmap_learning/">Sqlmap learning</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">0Xor' CTF WriteUp</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Wargame &raquo;</li>
+        
+      
+        
+          <li>Reversing &raquo;</li>
+        
+      
+    
+    <li>[bugku.com] ali</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="timerctf">Timer(阿里CTF)</h2>
+<h2 id="0x1">0x1 题目</h2>
+<blockquote>
+<p>flag格式 flag{} </p>
+</blockquote>
+<h2 id="0x2">0x2 解题步骤</h2>
+<p>参考链接：https://blog.csdn.net/xiangshangbashaonian/article/details/80301054</p>
+<h3 id="0x1-jeb">0x1 jeb分析文件</h3>
+<blockquote>
+<p>apk安装之后出现一个读秒的，20万秒，大于3600，所以大于一个小时，所以太慢了，不等了。 </p>
+</blockquote>
+<p>jeb反编译，MainActivity代码 </p>
+<pre><code class="java">package net.bluelotus.tomorrow.easyandroid;
+
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+public class MainActivity extends AppCompatActivity {
+    int beg;
+    int k;
+    int now;
+    long t;
+
+    static {
+        System.loadLibrary(&quot;lhm&quot;);
+    }
+
+    public MainActivity() {
+        super();
+        this.beg = (((int)(System.currentTimeMillis() / 1000))) + 200000;
+        this.k = 0;
+        this.t = 0;
+    }
+
+    public static boolean is2(int n) {
+        boolean v1 = true;
+        if(n &gt; 3) {
+            if(n % 2 != 0 &amp;&amp; n % 3 != 0) {
+                int v0 = 5;
+                while(true) {
+                    if(v0 * v0 &lt;= n) {
+                        if(n % v0 != 0 &amp;&amp; n % (v0 + 2) != 0) {
+                            v0 += 6;
+                            continue;
+                        }
+
+                        return false;
+                    }
+                    else {
+                        return v1;
+                    }
+                }
+
+                return false;
+            }
+
+            v1 = false;
+        }
+        else if(n &lt;= 1) {
+            v1 = false;
+        }
+
+        return v1;
+    }
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setContentView(2130968600);
+        View v2 = this.findViewById(2131492944);
+        View v3 = this.findViewById(2131492945);
+        Handler v0 = new Handler();
+        v0.postDelayed(new Runnable() {
+            public void run() {
+                MainActivity.this.t = System.currentTimeMillis();
+                MainActivity.this.now = ((int)(MainActivity.this.t / 1000));
+                MainActivity.this.t = 1500 - MainActivity.this.t % 1000;
+                this.val$tv2.setText(&quot;AliCTF&quot;);
+                if(MainActivity.this.beg - MainActivity.this.now &lt;= 0) {
+                    this.val$tv1.setText(&quot;The flag is:&quot;);
+                    this.val$tv2.setText(&quot;alictf{&quot; + MainActivity.this.stringFromJNI2(MainActivity.this
+                            .k) + &quot;}&quot;);
+                }
+
+                if(MainActivity.is2(MainActivity.this.beg - MainActivity.this.now)) {
+                    MainActivity.this.k += 100;
+                }
+                else {
+                    --MainActivity.this.k;
+                }
+
+                this.val$tv1.setText(&quot;Time Remaining(s):&quot; + (MainActivity.this.beg - MainActivity.this
+                        .now));
+                this.val$handler.postDelayed(((Runnable)this), MainActivity.this.t);
+            }
+        }, 0);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.getMenuInflater().inflate(2131558400, menu);
+        return 1;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean v1 = item.getItemId() == 2131492959 ? true : super.onOptionsItemSelected(item);
+        return v1;
+    }
+
+    public native String stringFromJNI2(int arg1) {
+    }
+}
+</code></pre>
+
+<ul>
+<li>关键点</li>
+</ul>
+<p><code>java
+  if(MainActivity.this.beg - MainActivity.this.now &lt;= 0) {
+                      this.val$tv1.setText("The flag is:");
+                      this.val$tv2.setText("alictf{" + MainActivity.this.stringFromJNI2(MainActivity.this
+                              .k) + "}");
+                  }</code></p>
+<ul>
+<li>找到 beg 和 now 的点： </li>
+</ul>
+<p>```java
+  public MainActivity() {
+          super();
+          this.beg = (((int)(System.currentTimeMillis() / 1000))) + 200000;//打开activity时候的时间（除以1000，所以是秒为单位）再加上200000，即200000+当前时间对应的秒
+          this.k = 0;
+          this.t = 0;
+      }</p>
+<p>```</p>
+<p>以及<code>MainActivity.this.now = ((int)(MainActivity.this.t / 1000));</code>即判断的时候的秒  那么 beg - now 就是 200000 + 开始的时间 - 判断的时间，也就是 200000 - 已经过去的时间，所以就是如果过去了 200000 秒，就可以出现 flag 了。  呈现 flag 是通过 native 层的<code>this.val$tv2.setText("alictf{" + MainActivity.this.stringFromJNI2(MainActivity.this .k) + "}");</code>也就是 stringFromJNI2 来呈现的，我们不必逆向 so，这个参数是一个 k，如果真的去等 200000 秒（虽然不可能），那么这里的 k 应该是多少呢？ </p>
+<ul>
+<li>跟 k 相关的两个关键点如下： </li>
+</ul>
+<p>```java
+  public static boolean is2(int n) {
+          boolean v1 = true;
+          if(n &gt; 3) {
+              if(n % 2 != 0 &amp;&amp; n % 3 != 0) {
+                  int v0 = 5;
+                  while(true) {
+                      if(v0 * v0 &lt;= n) {
+                          if(n % v0 != 0 &amp;&amp; n % (v0 + 2) != 0) {
+                              v0 += 6;
+                              continue;
+                          }</p>
+<pre><code>                      return false;
+                  }
+                  else {
+                      return v1;
+                  }
+              }
+
+              return false;
+          }
+
+          v1 = false;
+      }
+      else if(n &lt;= 1) {
+          v1 = false;
+      }
+
+      return v1;
+  }
+</code></pre>
+<p>if(MainActivity.is2(MainActivity.this.beg - MainActivity.this.now)) {
+                      MainActivity.this.k += 100;
+                  }
+                  else {
+                      --MainActivity.this.k;
+                  }</p>
+<p>```</p>
+<ul>
+<li>总结思路：通过 beg - now 代入 is2 函数对 k 进行操作，200000，需要一秒一秒的操作，而我们，直接通过写代码模拟出 200000 的结果，找到 k，然后改动 k 值，直接调用，就可以得到 flag 了。</li>
+</ul>
+<h3 id="0x2-k">0x2 计算k值</h3>
+<p>is2 是用 java 写的，懒得看逻辑，直接复制到 java 里边： </p>
+<pre><code class="java">package test;
+
+public class Main {
+
+    public static boolean is2(int n) {
+        boolean v1 = true;
+        if(n &gt; 3) {
+            if(n % 2 != 0 &amp;&amp; n % 3 != 0) {
+                int v0 = 5;
+                while(true) {
+                    if(v0 * v0 &lt;= n) {
+                        if(n % v0 != 0 &amp;&amp; n % (v0 + 2) != 0) {
+                            v0 += 6;
+                            continue;
+                        }
+
+                        return false;
+                    }
+                    else {
+                        return v1;
+                    }
+                }
+            }
+
+            v1 = false;
+        }
+        else if(n &lt;= 1) {
+            v1 = false;
+        }
+
+        return v1;
+    }
+
+    public static void main(String args[]) {
+        int time = 200000;
+        int k = 0;
+        while (time &gt; 0) {
+            if (is2(time)) {
+                k += 100;
+            }
+            else {
+                k--;
+            }
+            time--;
+        }
+        System.out.println(k);
+    }
+
+}
+
+</code></pre>
+
+<p>输出：运行得到 k 值:1616384 </p>
+<h3 id="0x3-apk">0x3 修改并打包运行原apk</h3>
+<ol>
+<li>将输出 flag 的条件反过来，即 MainActivity$1.smali 中的<code>if-gtz v0, :cond_0</code>这句话（后面是输出 The Flag Is 那里的跳转）改为<code>if-ltz v0, :cond_0</code></li>
+<li>将 k 值改为常量，即上文提到的 smali 文件中的<code>iget v3, v3 ....(省略);-&gt;k:I</code>之后<strong>另起一行</strong>添加<code>const v3, 1616384</code></li>
+<li>重新打包，签名，安装，得到 flag 为 alictf{Y0vAr3TimerMa3te7} </li>
+</ol>
+<p>注意：</p>
+<ol>
+<li>
+<p>android killer1.3版本中的apktools版本编译会发生错误，下载最新的apktool之后，在配置中添加并应用，成功</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/dreamer2020/article/details/52761606">手动运行apktools实现反编译，修改，打包，运行的过程</a></p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/wgw335363240/article/details/6332238">java命令行使用</a>，要注意test包名需要手动创建，运行指令为：<code>java test.Main</code></p>
+</li>
+<li>
+<p>vs code下运行java单文件，需要在同级目录下创建<code>.classpath</code>文件</p>
+</li>
+</ol>
+<p><code>xml
+   &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+   &lt;classpath&gt;
+       &lt;classpathentry kind="src" path="src"/&gt;
+       &lt;classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/&gt;
+       &lt;classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/&gt;
+       &lt;classpathentry kind="output" path="bin"/&gt;
+   &lt;/classpath&gt;</code></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../%5Bctf.nuptzj.cn%5D_ReadAsm2/" class="btn btn-neutral float-right" title="[ctf.nuptzj.cn] ReadAsm2">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../misc/%5Bctf.nuptzj.cn%5D_tuzhong/" class="btn btn-neutral" title="图种"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>0Xor</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../../misc/%5Bctf.nuptzj.cn%5D_tuzhong/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../%5Bctf.nuptzj.cn%5D_ReadAsm2/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/require.js"></script>
+      <script src="../../../search/search.js"></script>
+
+</body>
+</html>

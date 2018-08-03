@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>[ctf.nuptzj.cn] gif - 0Xor' CTF WriteUp</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "[ctf.nuptzj.cn] gif";
+    var mkdocs_page_input_path = "wargame\\misc\\[ctf.nuptzj.cn]_gif.md";
+    var mkdocs_page_url = "/wargame/misc/[ctf.nuptzj.cn]_gif/";
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> 0Xor' CTF WriteUp</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../..">Welcome to 0Xor' WriteUp</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Reversing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../reversing/Moblie/">Moblie</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../reversing/reversing%20misc/">reversing misc</a>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Encrypt&decrypt</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">加密与解密 第一章 基础知识</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%9D%99%E6%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E6%9C%AF/">加密与解密 第三章 静态调试技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E6%9C%AF/">加密与解密 第二章 动态调试技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%8D%81%E7%AB%A0-PE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/">加密与解密 第十章 PE文件格式</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E9%80%86%E5%90%91%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF/">加密与解密 第四章 逆向分析技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E7%9B%AE%E5%BD%95/">目录</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Wargame</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <span class="caption-text">Crypto</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_PHP_decode/">[ctf.nuptzj.cn] PHP decode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_base64_N_times/">[ctf.nuptzj.cn] base64 N times</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_base64_all/">[ctf.nuptzj.cn] base64 all</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_easy/">easy</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_keyboard/">[ctf.nuptzj.cn] keyboard</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_md5/">[ctf.nuptzj.cn] md5</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_mixed_base64/">[ctf.nuptzj.cn] mixed base64</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_vigenere/">[ctf.nuptzj.cn] vigenere</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_xor/">[ctf.nuptzj.cn] xor</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/crypto_summary/">Cryto Summary</a>
+                </li>
+    </ul>
+                </li>
+                <li class=" current">
+                    
+    <span class="caption-text">Misc</span>
+    <ul class="subnav">
+                <li class="toctree-l3 current">
+                    
+    <a class="current" href="./">[ctf.nuptzj.cn] gif</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l4"><a href="#_1">题目</a></li>
+    
+
+    <li class="toctree-l4"><a href="#_2">解答思路</a></li>
+    
+
+    <li class="toctree-l4"><a href="#_3">解题步骤</a></li>
+    
+
+    <li class="toctree-l4"><a href="#_4">漏洞挖掘思路</a></li>
+    
+
+    <li class="toctree-l4"><a href="#_5">待实现</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_qiubilong/">[ctf.nuptzj.cn] qiubilong</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_tuzhong/">[ctf.nuptzj.cn] tuzhong</a>
+                </li>
+    </ul>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Reversing</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bbugku.com%5D_ali/">[bugku.com] ali</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_ReadAsm2/">[ctf.nuptzj.cn] ReadAsm2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_maze/">[ctf.nuptzj.cn] maze</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_py/">[ctf.nuptzj.cn] py</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_wxyvm/">[ctf.nuptzj.cn] wxyvm</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_wxyvm2/">[ctf.nuptzj.cn] wxyvm2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bwhaleedu.com%5D_dice/">[whaleedu.com] dice</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bwhaleedu.com%5D_pyc1/">[whaleedu.com] pyc1</a>
+                </li>
+    </ul>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Web</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bbugku.com%5D_upload_test/">[bugku.com] upload test</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bbugku.com%5D_web2/">[bugku.com] web2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_20_years/">[ctf.nuptzj.cn] 20 years</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_aaencode/">[ctf.nuptzj.cn] aaencode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_bypass_again/">[ctf.nuptzj.cn] bypass again</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_cookie/">[ctf.nuptzj.cn] cookie</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_md5_collision/">[ctf.nuptzj.cn] md5 collision</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_multi-byte_character/">[ctf.nuptzj.cn] multi byte character</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_mysql/">[ctf.nuptzj.cn] mysql</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_pass%20check/">[ctf.nuptzj.cn] pass check</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_php_0x/">[ctf.nuptzj.cn] php 0x</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_php_LFI/">[ctf.nuptzj.cn] php LFI</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_php_decode/">[ctf.nuptzj.cn] php decode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_qiandao/">[ctf.nuptzj.cn] qiandao</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_qiandao2/">[ctf.nuptzj.cn] qiandao2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_sql_injection_1/">[ctf.nuptzj.cn] sql injection 1</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_sql_injection_2/">[ctf.nuptzj.cn] sql injection 2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_sql_injection_4/">[ctf.nuptzj.cn] sql injection 4</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_upload_file/">[ctf.nuptzj.cn] upload file</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_url_redirect/">[ctf.nuptzj.cn] url redirect</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_var_override/">[ctf.nuptzj.cn] var override</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_web3/">[ctf.nuptzj.cn] web3</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_where_are_you_come_from/">[ctf.nuptzj.cn] where are you come from</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_x00/">[ctf.nuptzj.cn] x00</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_zonghe/">[ctf.nuptzj.cn] zonghe</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bctf.nuptzj.cn%5D_zonghe2/">[ctf.nuptzj.cn] zonghe2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_add_something/">[shiyanbar.com] add something</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_be_serious/">[shiyanbar.com] be serious</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_forms/">[shiyanbar.com] forms</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_guaiwanmojiao/">[shiyanbar.com] guaiwanmojiao</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_houtaidenglu/">[shiyanbar.com] houtaidenglu</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_post_fast/">[shiyanbar.com] post fast</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_simple_sql_injection/">[shiyanbar.com] simple sql injection</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_simple_sql_injection_2/">[shiyanbar.com] simple sql injection 2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/%5Bshiyanbar.com%5D_simple_sql_injection_3/">[shiyanbar.com] simple sql injection 3</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../web/web_summary/">Web summary</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Web</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../web/sqlmap_learning/">Sqlmap learning</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">0Xor' CTF WriteUp</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Wargame &raquo;</li>
+        
+      
+        
+          <li>Misc &raquo;</li>
+        
+      
+    
+    <li>[ctf.nuptzj.cn] gif</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="_1">题目</h2>
+<blockquote>
+<p>http://chinalover.sinaapp.com/web2/index.html
+</p>
+</blockquote>
+<h2 id="_2">解答思路</h2>
+<ol>
+<li>二进制编辑器查看GIF</li>
+<li>在文件末尾找flag</li>
+</ol>
+<h2 id="_3">解题步骤</h2>
+<ol>
+<li>使用strings查看2.gif</li>
+</ol>
+<p><code>shell
+   strings -a 2.gif|grep ctf</code></p>
+<p>得到结果：</p>
+<blockquote>
+<p>;nctf{photo_can_also_hid3_msg} </p>
+</blockquote>
+<ol>
+<li>或者使用winhex查看，找到flag</li>
+</ol>
+<h2 id="_4">漏洞挖掘思路</h2>
+<ul>
+<li>无</li>
+</ul>
+<h2 id="_5">待实现</h2>
+<ul>
+<li>
+<p>TODO</p>
+</li>
+<li>
+<p>判断题目特征：<code>web</code> <code>php</code> <code>md5 collision</code></p>
+</li>
+<li>设定题目难度等级<code>level</code>为simple</li>
+<li>提交相应符合要求的字符串</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../%5Bctf.nuptzj.cn%5D_qiubilong/" class="btn btn-neutral float-right" title="[ctf.nuptzj.cn] qiubilong">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../crypto/crypto_summary/" class="btn btn-neutral" title="Cryto Summary"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>0Xor</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../../crypto/crypto_summary/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../%5Bctf.nuptzj.cn%5D_qiubilong/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/require.js"></script>
+      <script src="../../../search/search.js"></script>
+
+</body>
+</html>

